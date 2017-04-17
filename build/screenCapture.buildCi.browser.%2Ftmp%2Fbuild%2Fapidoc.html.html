@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/isaacs/sax-js#readme"
-
-    >sax (v1.2.2)</a>
+    <a href="https://github.com/isaacs/sax-js#readme">sax (v1.2.2)</a>
 </h1>
 <h4>An evented streaming XML parser in JavaScript</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.sax">module sax</a><ol>
 
@@ -469,11 +462,11 @@
 
   var parser = this
   clearBuffers(parser)
-  parser.q = parser.c = &#x27;&#x27;
+  parser.q = parser.c = ''
   parser.bufferCheckPosition = sax.MAX_BUFFER_LENGTH
   parser.opt = opt || {}
   parser.opt.lowercase = parser.opt.lowercase || parser.opt.lowercasetags
-  parser.looseCase = parser.opt.lowercase ? &#x27;toLowerCase&#x27; : &#x27;toUpperCase&#x27;
+  parser.looseCase = parser.opt.lowercase ? 'toLowerCase' : 'toUpperCase'
   parser.tags = []
   parser.closed = parser.closedRoot = parser.sawRoot = false
   parser.tag = parser.error = null
@@ -496,7 +489,7 @@
   if (parser.trackPosition) {
     parser.position = parser.line = parser.column = 0
   }
-  emit(parser, &#x27;onready&#x27;)
+  emit(parser, 'onready')
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -569,16 +562,16 @@
   }
   if (parser.closed) {
     return error(parser,
-      &#x27;Cannot write after close. Assign an onready handler.&#x27;)
+      'Cannot write after close. Assign an onready handler.')
   }
   if (chunk === null) {
     return end(parser)
   }
-  if (typeof chunk === &#x27;object&#x27;) {
+  if (typeof chunk === 'object') {
     chunk = chunk.toString()
   }
   var i = 0
-  var c = &#x27;&#x27;
+  var c = ''
   while (true) {
     c = charAt(chunk, i++)
     parser.c = c
@@ -589,7 +582,7 @@
 
     if (parser.trackPosition) {
       parser.position++
-      if (c === &#x27;\n&#x27;) {
+      if (c === '\n') {
         parser.line++
         parser.column = 0
       } else {
@@ -600,7 +593,7 @@
     switch (parser.state) {
       case S.BEGIN:
         parser.state = S.BEGIN_WHITESPACE
-        if (c === &#x27;\uFEFF&#x27;) {
+        if (c === '\uFEFF') {
           continue
         }
         beginWhiteSpace(parser, c)
@@ -611,13 +604,13 @@
         continue
 
       case S.TEXT:
-        if (parser.sawRoot &#x26;&#x26; !parser.closedRoot) {
+        if (parser.sawRoot &amp;&amp; !parser.closedRoot) {
           var starti = i - 1
-          while (c &#x26;&#x26; c !== &#x27;&#x3c;&#x27; &#x26;&#x26; c !== &#x27;&#x26;&#x27;) {
+          while (c &amp;&amp; c !== '&lt;' &amp;&amp; c !== '&amp;') {
             c = charAt(chunk, i++)
-            if (c &#x26;&#x26; parser.trackPosition) {
+            if (c &amp;&amp; parser.trackPosition) {
               parser.position++
-              if (c === &#x27;\n&#x27;) {
+              if (c === '\n') {
                 parser.line++
                 parser.column = 0
               } else {
@@ -627,14 +620,14 @@
           }
           parser.textNode += chunk.substring(starti, i - 1)
         }
-        if (c === &#x27;&#x3c;&#x27; &#x26;&#x26; !(parser.sawRoot &#x26;&#x26; parser.closedRoot &#x26;&#x26; !parser.strict)) {
+        if (c === '&lt;' &amp;&amp; !(parser.sawRoot &amp;&amp; parser.closedRoot &amp;&amp; !parser.strict)) {
           parser.state = S.OPEN_WAKA
           parser.startTagPosition = parser.position
         } else {
-          if (not(whitespace, c) &#x26;&#x26; (!parser.sawRoot || parser.closedRoot)) {
-            strictFail(parser, &#x27;Text data outside of root node.&#x27;)
+          if (not(whitespace, c) &amp;&amp; (!parser.sawRoot || parser.closedRoot)) {
+            strictFail(parser, 'Text data outside of root node.')
           }
-          if (c === &#x27;&#x26;&#x27;) {
+          if (c === '&amp;') {
             parser.state = S.TEXT_ENTITY
           } else {
             parser.textNode += c
@@ -644,7 +637,7 @@
 
       case S.SCRIPT:
         // only non-strict
-        if (c === &#x27;&#x3c;&#x27;) {
+        if (c === '&lt;') {
           parser.state = S.SCRIPT_ENDING
         } else {
           parser.script += c
@@ -652,62 +645,62 @@
         continue
 
       case S.SCRIPT_ENDING:
-        if (c === &#x27;/&#x27;) {
+        if (c === '/') {
           parser.state = S.CLOSE_TAG
         } else {
-          parser.script += &#x27;&#x3c;&#x27; + c
+          parser.script += '&lt;' + c
           parser.state = S.SCRIPT
         }
         continue
 
       case S.OPEN_WAKA:
         // either a /, ?, !, or text is coming next.
-        if (c === &#x27;!&#x27;) {
+        if (c === '!') {
           parser.state = S.SGML_DECL
-          parser.sgmlDecl = &#x27;&#x27;
+          parser.sgmlDecl = ''
         } else if (is(whitespace, c)) {
           // wait for it...
         } else if (isMatch(nameStart, c)) {
           parser.state = S.OPEN_TAG
           parser.tagName = c
-        } else if (c === &#x27;/&#x27;) {
+        } else if (c === '/') {
           parser.state = S.CLOSE_TAG
-          parser.tagName = &#x27;&#x27;
-        } else if (c === &#x27;?&#x27;) {
+          parser.tagName = ''
+        } else if (c === '?') {
           parser.state = S.PROC_INST
-          parser.procInstName = parser.procInstBody = &#x27;&#x27;
+          parser.procInstName = parser.procInstBody = ''
         } else {
-          strictFail(parser, &#x27;Unencoded &#x3c;&#x27;)
+          strictFail(parser, 'Unencoded &lt;')
           // if there was some whitespace, then add that in.
-          if (parser.startTagPosition + 1 &#x3c; parser.position) {
+          if (parser.startTagPosition + 1 &lt; parser.position) {
             var pad = parser.position - parser.startTagPosition
-            c = new Array(pad).join(&#x27; &#x27;) + c
+            c = new Array(pad).join(' ') + c
           }
-          parser.textNode += &#x27;&#x3c;&#x27; + c
+          parser.textNode += '&lt;' + c
           parser.state = S.TEXT
         }
         continue
 
       case S.SGML_DECL:
         if ((parser.sgmlDecl + c).toUpperCase() === CDATA) {
-          emitNode(parser, &#x27;onopencdata&#x27;)
+          emitNode(parser, 'onopencdata')
           parser.state = S.CDATA
-          parser.sgmlDecl = &#x27;&#x27;
-          parser.cdata = &#x27;&#x27;
-        } else if (parser.sgmlDecl + c === &#x27;--&#x27;) {
+          parser.sgmlDecl = ''
+          parser.cdata = ''
+        } else if (parser.sgmlDecl + c === '--') {
           parser.state = S.COMMENT
-          parser.comment = &#x27;&#x27;
-          parser.sgmlDecl = &#x27;&#x27;
+          parser.comment = ''
+          parser.sgmlDecl = ''
         } else if ((parser.sgmlDecl + c).toUpperCase() === DOCTYPE) {
           parser.state = S.DOCTYPE
           if (parser.doctype || parser.sawRoot) {
             strictFail(parser,
-              &#x27;Inappropriately located doctype declaration&#x27;)
+              'Inappropriately located doctype declaration')
           }
-          parser.doctype = &#x27;&#x27;
-          parser.sgmlDecl = &#x27;&#x27;
-        } else if (c === &#x27;&#x3e;&#x27;) {
-          emitNode(parser, &#x27;onsgmldeclaration&#x27;, parser.sgmlDecl) ...</pre></li>
+          parser.doctype = ''
+          parser.sgmlDecl = ''
+        } else if (c === '&gt;') {
+          emitNode(parser, 'onsgmldeclaration', parser.sgmlDecl) ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -734,13 +727,13 @@
   var me = this
 
   this._parser.onend = function () {
-    me.emit(&#x27;end&#x27;)
+    me.emit('end')
   }
 
   this._parser.onerror = function (er) {
-    me.emit(&#x27;error&#x27;, er)
+    me.emit('error', er)
 
-    // if didn&#x27;t throw, then means error was handled.
+    // if didn't throw, then means error was handled.
     // go ahead and clear error, so we can write again.
     me._parser.error = null
   }
@@ -748,14 +741,14 @@
   this._decoder = null
 
   streamWraps.forEach(function (ev) {
-    Object.defineProperty(me, &#x27;on&#x27; + ev, {
+    Object.defineProperty(me, 'on' + ev, {
       get: function () {
-        return me._parser[&#x27;on&#x27; + ev]
+        return me._parser['on' + ev]
       },
       set: function (h) {
         if (!h) {
           me.removeAllListeners(ev)
-          me._parser[&#x27;on&#x27; + ev] = h
+          me._parser['on' + ev] = h
           return h
         }
         me.on(ev, h)
@@ -778,7 +771,7 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">SAXStream.prototype.end = function (chunk) {
-  if (chunk &#x26;&#x26; chunk.length) {
+  if (chunk &amp;&amp; chunk.length) {
     this.write(chunk)
   }
   this._parser.end()
@@ -798,8 +791,8 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">SAXStream.prototype.on = function (ev, handler) {
   var me = this
-  if (!me._parser[&#x27;on&#x27; + ev] &#x26;&#x26; streamWraps.indexOf(ev) !== -1) {
-    me._parser[&#x27;on&#x27; + ev] = function () {
+  if (!me._parser['on' + ev] &amp;&amp; streamWraps.indexOf(ev) !== -1) {
+    me._parser['on' + ev] = function () {
       var args = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments)
       args.splice(0, 0, ev)
       me.emit.apply(me, args)
@@ -821,18 +814,18 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">SAXStream.prototype.write = function (data) {
-  if (typeof Buffer === &#x27;function&#x27; &#x26;&#x26;
-    typeof Buffer.isBuffer === &#x27;function&#x27; &#x26;&#x26;
+  if (typeof Buffer === 'function' &amp;&amp;
+    typeof Buffer.isBuffer === 'function' &amp;&amp;
     Buffer.isBuffer(data)) {
     if (!this._decoder) {
-      var SD = require(&#x27;string_decoder&#x27;).StringDecoder
-      this._decoder = new SD(&#x27;utf8&#x27;)
+      var SD = require('string_decoder').StringDecoder
+      this._decoder = new SD('utf8')
     }
     data = this._decoder.write(data)
   }
 
   this._parser.write(data.toString())
-  this.emit(&#x27;data&#x27;, data)
+  this.emit('data', data)
   return true
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -854,16 +847,16 @@
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.write(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close
+parser.write('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;').close
 ();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).<span class="apidocCodeKeywordSpan">createStream</span>(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").<span class="apidocCodeKeywordSpan">createStream</span>(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
-console.error(&#x22;error!&#x22;, e)
+console.error("error!", e)
 // clear the error
 this._parser.error = null
 this._parser.resume()
@@ -886,7 +879,7 @@ through unmolested.
 ## Usage
 
 ```javascript
-var sax = require(&#x22;./lib/sax&#x22;),
+var sax = require("./lib/sax"),
   strict = true, // set to false for html-mode
   parser = sax.<span class="apidocCodeKeywordSpan">parser</span>(strict);
 
@@ -934,11 +927,11 @@ parser.ontext = function (t) {
 
   var parser = this
   clearBuffers(parser)
-  parser.q = parser.c = &#x27;&#x27;
+  parser.q = parser.c = ''
   parser.bufferCheckPosition = sax.MAX_BUFFER_LENGTH
   parser.opt = opt || {}
   parser.opt.lowercase = parser.opt.lowercase || parser.opt.lowercasetags
-  parser.looseCase = parser.opt.lowercase ? &#x27;toLowerCase&#x27; : &#x27;toUpperCase&#x27;
+  parser.looseCase = parser.opt.lowercase ? 'toLowerCase' : 'toUpperCase'
   parser.tags = []
   parser.closed = parser.closedRoot = parser.sawRoot = false
   parser.tag = parser.error = null
@@ -961,7 +954,7 @@ parser.ontext = function (t) {
   if (parser.trackPosition) {
     parser.position = parser.line = parser.column = 0
   }
-  emit(parser, &#x27;onready&#x27;)
+  emit(parser, 'onready')
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -983,19 +976,18 @@ parser.ontext = function (t) {
     <li>description and source-code<pre class="apidocCodePre">close = function () { return this.write(null) }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 parser.onattribute = function (attr) {
-// an attribute.  attr has &#x22;name&#x22; and &#x22;value&#x22;
+// an attribute.  attr has "name" and "value"
 };
 parser.onend = function () {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.write(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).<span
- class="apidocCodeKeywordSpan">close</span>();
+parser.write('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;').<span class="apidocCodeKeywordSpan">close</span>();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
 ...</pre></li>
@@ -1038,21 +1030,21 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">resume = function () { this.error = null; return this }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
   // unhandled errors will throw, since this is a proper node
   // event emitter.
-  console.error(&#x22;error!&#x22;, e)
+  console.error("error!", e)
   // clear the error
   this._parser.error = null
   this._parser.<span class="apidocCodeKeywordSpan">resume</span>()
 })
-saxStream.on(&#x22;opentag&#x22;, function (node) {
+saxStream.on("opentag", function (node) {
   // same object as above
 })
-// pipe is supported, and it&#x27;s readable/writable
+// pipe is supported, and it's readable/writable
 // same chunks coming in also go out.
-fs.createReadStream(&#x22;file.xml&#x22;)
+fs.createReadStream("file.xml")
 ...</pre></li>
     </ul>
 
@@ -1072,16 +1064,16 @@ fs.createReadStream(&#x22;file.xml&#x22;)
   }
   if (parser.closed) {
     return error(parser,
-      &#x27;Cannot write after close. Assign an onready handler.&#x27;)
+      'Cannot write after close. Assign an onready handler.')
   }
   if (chunk === null) {
     return end(parser)
   }
-  if (typeof chunk === &#x27;object&#x27;) {
+  if (typeof chunk === 'object') {
     chunk = chunk.toString()
   }
   var i = 0
-  var c = &#x27;&#x27;
+  var c = ''
   while (true) {
     c = charAt(chunk, i++)
     parser.c = c
@@ -1092,7 +1084,7 @@ fs.createReadStream(&#x22;file.xml&#x22;)
 
     if (parser.trackPosition) {
       parser.position++
-      if (c === &#x27;\n&#x27;) {
+      if (c === '\n') {
         parser.line++
         parser.column = 0
       } else {
@@ -1103,7 +1095,7 @@ fs.createReadStream(&#x22;file.xml&#x22;)
     switch (parser.state) {
       case S.BEGIN:
         parser.state = S.BEGIN_WHITESPACE
-        if (c === &#x27;\uFEFF&#x27;) {
+        if (c === '\uFEFF') {
           continue
         }
         beginWhiteSpace(parser, c)
@@ -1114,13 +1106,13 @@ fs.createReadStream(&#x22;file.xml&#x22;)
         continue
 
       case S.TEXT:
-        if (parser.sawRoot &#x26;&#x26; !parser.closedRoot) {
+        if (parser.sawRoot &amp;&amp; !parser.closedRoot) {
           var starti = i - 1
-          while (c &#x26;&#x26; c !== &#x27;&#x3c;&#x27; &#x26;&#x26; c !== &#x27;&#x26;&#x27;) {
+          while (c &amp;&amp; c !== '&lt;' &amp;&amp; c !== '&amp;') {
             c = charAt(chunk, i++)
-            if (c &#x26;&#x26; parser.trackPosition) {
+            if (c &amp;&amp; parser.trackPosition) {
               parser.position++
-              if (c === &#x27;\n&#x27;) {
+              if (c === '\n') {
                 parser.line++
                 parser.column = 0
               } else {
@@ -1130,14 +1122,14 @@ fs.createReadStream(&#x22;file.xml&#x22;)
           }
           parser.textNode += chunk.substring(starti, i - 1)
         }
-        if (c === &#x27;&#x3c;&#x27; &#x26;&#x26; !(parser.sawRoot &#x26;&#x26; parser.closedRoot &#x26;&#x26; !parser.strict)) {
+        if (c === '&lt;' &amp;&amp; !(parser.sawRoot &amp;&amp; parser.closedRoot &amp;&amp; !parser.strict)) {
           parser.state = S.OPEN_WAKA
           parser.startTagPosition = parser.position
         } else {
-          if (not(whitespace, c) &#x26;&#x26; (!parser.sawRoot || parser.closedRoot)) {
-            strictFail(parser, &#x27;Text data outside of root node.&#x27;)
+          if (not(whitespace, c) &amp;&amp; (!parser.sawRoot || parser.closedRoot)) {
+            strictFail(parser, 'Text data outside of root node.')
           }
-          if (c === &#x27;&#x26;&#x27;) {
+          if (c === '&amp;') {
             parser.state = S.TEXT_ENTITY
           } else {
             parser.textNode += c
@@ -1147,7 +1139,7 @@ fs.createReadStream(&#x22;file.xml&#x22;)
 
       case S.SCRIPT:
         // only non-strict
-        if (c === &#x27;&#x3c;&#x27;) {
+        if (c === '&lt;') {
           parser.state = S.SCRIPT_ENDING
         } else {
           parser.script += c
@@ -1155,77 +1147,77 @@ fs.createReadStream(&#x22;file.xml&#x22;)
         continue
 
       case S.SCRIPT_ENDING:
-        if (c === &#x27;/&#x27;) {
+        if (c === '/') {
           parser.state = S.CLOSE_TAG
         } else {
-          parser.script += &#x27;&#x3c;&#x27; + c
+          parser.script += '&lt;' + c
           parser.state = S.SCRIPT
         }
         continue
 
       case S.OPEN_WAKA:
         // either a /, ?, !, or text is coming next.
-        if (c === &#x27;!&#x27;) {
+        if (c === '!') {
           parser.state = S.SGML_DECL
-          parser.sgmlDecl = &#x27;&#x27;
+          parser.sgmlDecl = ''
         } else if (is(whitespace, c)) {
           // wait for it...
         } else if (isMatch(nameStart, c)) {
           parser.state = S.OPEN_TAG
           parser.tagName = c
-        } else if (c === &#x27;/&#x27;) {
+        } else if (c === '/') {
           parser.state = S.CLOSE_TAG
-          parser.tagName = &#x27;&#x27;
-        } else if (c === &#x27;?&#x27;) {
+          parser.tagName = ''
+        } else if (c === '?') {
           parser.state = S.PROC_INST
-          parser.procInstName = parser.procInstBody = &#x27;&#x27;
+          parser.procInstName = parser.procInstBody = ''
         } else {
-          strictFail(parser, &#x27;Unencoded &#x3c;&#x27;)
+          strictFail(parser, 'Unencoded &lt;')
           // if there was some whitespace, then add that in.
-          if (parser.startTagPosition + 1 &#x3c; parser.position) {
+          if (parser.startTagPosition + 1 &lt; parser.position) {
             var pad = parser.position - parser.startTagPosition
-            c = new Array(pad).join(&#x27; &#x27;) + c
+            c = new Array(pad).join(' ') + c
           }
-          parser.textNode += &#x27;&#x3c;&#x27; + c
+          parser.textNode += '&lt;' + c
           parser.state = S.TEXT
         }
         continue
 
       case S.SGML_DECL:
         if ((parser.sgmlDecl + c).toUpperCase() === CDATA) {
-          emitNode(parser, &#x27;onopencdata&#x27;)
+          emitNode(parser, 'onopencdata')
           parser.state = S.CDATA
-          parser.sgmlDecl = &#x27;&#x27;
-          parser.cdata = &#x27;&#x27;
-        } else if (parser.sgmlDecl + c === &#x27;--&#x27;) {
+          parser.sgmlDecl = ''
+          parser.cdata = ''
+        } else if (parser.sgmlDecl + c === '--') {
           parser.state = S.COMMENT
-          parser.comment = &#x27;&#x27;
-          parser.sgmlDecl = &#x27;&#x27;
+          parser.comment = ''
+          parser.sgmlDecl = ''
         } else if ((parser.sgmlDecl + c).toUpperCase() === DOCTYPE) {
           parser.state = S.DOCTYPE
           if (parser.doctype || parser.sawRoot) {
             strictFail(parser,
-              &#x27;Inappropriately located doctype declaration&#x27;)
+              'Inappropriately located doctype declaration')
           }
-          parser.doctype = &#x27;&#x27;
-          parser.sgmlDecl = &#x27;&#x27;
-        } else if (c === &#x27;&#x3e;&#x27;) {
-          emitNode(parser, &#x27;onsgmldeclaration&#x27;, parser.sgmlDecl) ...</pre></li>
+          parser.doctype = ''
+          parser.sgmlDecl = ''
+        } else if (c === '&gt;') {
+          emitNode(parser, 'onsgmldeclaration', parser.sgmlDecl) ...</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 parser.onattribute = function (attr) {
-// an attribute.  attr has &#x22;name&#x22; and &#x22;value&#x22;
+// an attribute.  attr has "name" and "value"
 };
 parser.onend = function () {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.<span class="apidocCodeKeywordSpan">write</span>(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#
-x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close();
+parser.<span class="apidocCodeKeywordSpan">write</span>('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&amp;#
+x3c;/who&gt;!&lt;/xml&gt;').close();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
 ...</pre></li>
@@ -1248,19 +1240,18 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <li>description and source-code<pre class="apidocCodePre">close = function () { return this.write(null) }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 parser.onattribute = function (attr) {
-// an attribute.  attr has &#x22;name&#x22; and &#x22;value&#x22;
+// an attribute.  attr has "name" and "value"
 };
 parser.onend = function () {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.write(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).<span
- class="apidocCodeKeywordSpan">close</span>();
+parser.write('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;').<span class="apidocCodeKeywordSpan">close</span>();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
 ...</pre></li>
@@ -1318,21 +1309,21 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">resume = function () { this.error = null; return this }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
   // unhandled errors will throw, since this is a proper node
   // event emitter.
-  console.error(&#x22;error!&#x22;, e)
+  console.error("error!", e)
   // clear the error
   this._parser.error = null
   this._parser.<span class="apidocCodeKeywordSpan">resume</span>()
 })
-saxStream.on(&#x22;opentag&#x22;, function (node) {
+saxStream.on("opentag", function (node) {
   // same object as above
 })
-// pipe is supported, and it&#x27;s readable/writable
+// pipe is supported, and it's readable/writable
 // same chunks coming in also go out.
-fs.createReadStream(&#x22;file.xml&#x22;)
+fs.createReadStream("file.xml")
 ...</pre></li>
     </ul>
 
@@ -1357,16 +1348,16 @@ fs.createReadStream(&#x22;file.xml&#x22;)
   }
   if (parser.closed) {
     return error(parser,
-      &#x27;Cannot write after close. Assign an onready handler.&#x27;)
+      'Cannot write after close. Assign an onready handler.')
   }
   if (chunk === null) {
     return end(parser)
   }
-  if (typeof chunk === &#x27;object&#x27;) {
+  if (typeof chunk === 'object') {
     chunk = chunk.toString()
   }
   var i = 0
-  var c = &#x27;&#x27;
+  var c = ''
   while (true) {
     c = charAt(chunk, i++)
     parser.c = c
@@ -1377,7 +1368,7 @@ fs.createReadStream(&#x22;file.xml&#x22;)
 
     if (parser.trackPosition) {
       parser.position++
-      if (c === &#x27;\n&#x27;) {
+      if (c === '\n') {
         parser.line++
         parser.column = 0
       } else {
@@ -1388,7 +1379,7 @@ fs.createReadStream(&#x22;file.xml&#x22;)
     switch (parser.state) {
       case S.BEGIN:
         parser.state = S.BEGIN_WHITESPACE
-        if (c === &#x27;\uFEFF&#x27;) {
+        if (c === '\uFEFF') {
           continue
         }
         beginWhiteSpace(parser, c)
@@ -1399,13 +1390,13 @@ fs.createReadStream(&#x22;file.xml&#x22;)
         continue
 
       case S.TEXT:
-        if (parser.sawRoot &#x26;&#x26; !parser.closedRoot) {
+        if (parser.sawRoot &amp;&amp; !parser.closedRoot) {
           var starti = i - 1
-          while (c &#x26;&#x26; c !== &#x27;&#x3c;&#x27; &#x26;&#x26; c !== &#x27;&#x26;&#x27;) {
+          while (c &amp;&amp; c !== '&lt;' &amp;&amp; c !== '&amp;') {
             c = charAt(chunk, i++)
-            if (c &#x26;&#x26; parser.trackPosition) {
+            if (c &amp;&amp; parser.trackPosition) {
               parser.position++
-              if (c === &#x27;\n&#x27;) {
+              if (c === '\n') {
                 parser.line++
                 parser.column = 0
               } else {
@@ -1415,14 +1406,14 @@ fs.createReadStream(&#x22;file.xml&#x22;)
           }
           parser.textNode += chunk.substring(starti, i - 1)
         }
-        if (c === &#x27;&#x3c;&#x27; &#x26;&#x26; !(parser.sawRoot &#x26;&#x26; parser.closedRoot &#x26;&#x26; !parser.strict)) {
+        if (c === '&lt;' &amp;&amp; !(parser.sawRoot &amp;&amp; parser.closedRoot &amp;&amp; !parser.strict)) {
           parser.state = S.OPEN_WAKA
           parser.startTagPosition = parser.position
         } else {
-          if (not(whitespace, c) &#x26;&#x26; (!parser.sawRoot || parser.closedRoot)) {
-            strictFail(parser, &#x27;Text data outside of root node.&#x27;)
+          if (not(whitespace, c) &amp;&amp; (!parser.sawRoot || parser.closedRoot)) {
+            strictFail(parser, 'Text data outside of root node.')
           }
-          if (c === &#x27;&#x26;&#x27;) {
+          if (c === '&amp;') {
             parser.state = S.TEXT_ENTITY
           } else {
             parser.textNode += c
@@ -1432,7 +1423,7 @@ fs.createReadStream(&#x22;file.xml&#x22;)
 
       case S.SCRIPT:
         // only non-strict
-        if (c === &#x27;&#x3c;&#x27;) {
+        if (c === '&lt;') {
           parser.state = S.SCRIPT_ENDING
         } else {
           parser.script += c
@@ -1440,77 +1431,77 @@ fs.createReadStream(&#x22;file.xml&#x22;)
         continue
 
       case S.SCRIPT_ENDING:
-        if (c === &#x27;/&#x27;) {
+        if (c === '/') {
           parser.state = S.CLOSE_TAG
         } else {
-          parser.script += &#x27;&#x3c;&#x27; + c
+          parser.script += '&lt;' + c
           parser.state = S.SCRIPT
         }
         continue
 
       case S.OPEN_WAKA:
         // either a /, ?, !, or text is coming next.
-        if (c === &#x27;!&#x27;) {
+        if (c === '!') {
           parser.state = S.SGML_DECL
-          parser.sgmlDecl = &#x27;&#x27;
+          parser.sgmlDecl = ''
         } else if (is(whitespace, c)) {
           // wait for it...
         } else if (isMatch(nameStart, c)) {
           parser.state = S.OPEN_TAG
           parser.tagName = c
-        } else if (c === &#x27;/&#x27;) {
+        } else if (c === '/') {
           parser.state = S.CLOSE_TAG
-          parser.tagName = &#x27;&#x27;
-        } else if (c === &#x27;?&#x27;) {
+          parser.tagName = ''
+        } else if (c === '?') {
           parser.state = S.PROC_INST
-          parser.procInstName = parser.procInstBody = &#x27;&#x27;
+          parser.procInstName = parser.procInstBody = ''
         } else {
-          strictFail(parser, &#x27;Unencoded &#x3c;&#x27;)
+          strictFail(parser, 'Unencoded &lt;')
           // if there was some whitespace, then add that in.
-          if (parser.startTagPosition + 1 &#x3c; parser.position) {
+          if (parser.startTagPosition + 1 &lt; parser.position) {
             var pad = parser.position - parser.startTagPosition
-            c = new Array(pad).join(&#x27; &#x27;) + c
+            c = new Array(pad).join(' ') + c
           }
-          parser.textNode += &#x27;&#x3c;&#x27; + c
+          parser.textNode += '&lt;' + c
           parser.state = S.TEXT
         }
         continue
 
       case S.SGML_DECL:
         if ((parser.sgmlDecl + c).toUpperCase() === CDATA) {
-          emitNode(parser, &#x27;onopencdata&#x27;)
+          emitNode(parser, 'onopencdata')
           parser.state = S.CDATA
-          parser.sgmlDecl = &#x27;&#x27;
-          parser.cdata = &#x27;&#x27;
-        } else if (parser.sgmlDecl + c === &#x27;--&#x27;) {
+          parser.sgmlDecl = ''
+          parser.cdata = ''
+        } else if (parser.sgmlDecl + c === '--') {
           parser.state = S.COMMENT
-          parser.comment = &#x27;&#x27;
-          parser.sgmlDecl = &#x27;&#x27;
+          parser.comment = ''
+          parser.sgmlDecl = ''
         } else if ((parser.sgmlDecl + c).toUpperCase() === DOCTYPE) {
           parser.state = S.DOCTYPE
           if (parser.doctype || parser.sawRoot) {
             strictFail(parser,
-              &#x27;Inappropriately located doctype declaration&#x27;)
+              'Inappropriately located doctype declaration')
           }
-          parser.doctype = &#x27;&#x27;
-          parser.sgmlDecl = &#x27;&#x27;
-        } else if (c === &#x27;&#x3e;&#x27;) {
-          emitNode(parser, &#x27;onsgmldeclaration&#x27;, parser.sgmlDecl) ...</pre></li>
+          parser.doctype = ''
+          parser.sgmlDecl = ''
+        } else if (c === '&gt;') {
+          emitNode(parser, 'onsgmldeclaration', parser.sgmlDecl) ...</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 parser.onattribute = function (attr) {
-// an attribute.  attr has &#x22;name&#x22; and &#x22;value&#x22;
+// an attribute.  attr has "name" and "value"
 };
 parser.onend = function () {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.<span class="apidocCodeKeywordSpan">write</span>(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#
-x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close();
+parser.<span class="apidocCodeKeywordSpan">write</span>('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&amp;#
+x3c;/who&gt;!&lt;/xml&gt;').close();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
 ...</pre></li>
@@ -1544,13 +1535,13 @@ saxStream.on(&#x22;error&#x22;, function (e) {
   var me = this
 
   this._parser.onend = function () {
-    me.emit(&#x27;end&#x27;)
+    me.emit('end')
   }
 
   this._parser.onerror = function (er) {
-    me.emit(&#x27;error&#x27;, er)
+    me.emit('error', er)
 
-    // if didn&#x27;t throw, then means error was handled.
+    // if didn't throw, then means error was handled.
     // go ahead and clear error, so we can write again.
     me._parser.error = null
   }
@@ -1558,14 +1549,14 @@ saxStream.on(&#x22;error&#x22;, function (e) {
   this._decoder = null
 
   streamWraps.forEach(function (ev) {
-    Object.defineProperty(me, &#x27;on&#x27; + ev, {
+    Object.defineProperty(me, 'on' + ev, {
       get: function () {
-        return me._parser[&#x27;on&#x27; + ev]
+        return me._parser['on' + ev]
       },
       set: function (h) {
         if (!h) {
           me.removeAllListeners(ev)
-          me._parser[&#x27;on&#x27; + ev] = h
+          me._parser['on' + ev] = h
           return h
         }
         me.on(ev, h)
@@ -1593,7 +1584,7 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">end = function (chunk) {
-  if (chunk &#x26;&#x26; chunk.length) {
+  if (chunk &amp;&amp; chunk.length) {
     this.write(chunk)
   }
   this._parser.end()
@@ -1613,8 +1604,8 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">on = function (ev, handler) {
   var me = this
-  if (!me._parser[&#x27;on&#x27; + ev] &#x26;&#x26; streamWraps.indexOf(ev) !== -1) {
-    me._parser[&#x27;on&#x27; + ev] = function () {
+  if (!me._parser['on' + ev] &amp;&amp; streamWraps.indexOf(ev) !== -1) {
+    me._parser['on' + ev] = function () {
       var args = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments)
       args.splice(0, 0, ev)
       me.emit.apply(me, args)
@@ -1626,16 +1617,16 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <li>example usage<pre class="apidocCodePre">...
 };
 
-parser.write(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close
+parser.write('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;').close
 ();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.<span class="apidocCodeKeywordSpan">on</span>(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.<span class="apidocCodeKeywordSpan">on</span>("error", function (e) {
   // unhandled errors will throw, since this is a proper node
   // event emitter.
-  console.error(&#x22;error!&#x22;, e)
+  console.error("error!", e)
   // clear the error
   this._parser.error = null
   this._parser.resume()
@@ -1653,35 +1644,35 @@ saxStream.<span class="apidocCodeKeywordSpan">on</span>(&#x22;error&#x22;, funct
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">write = function (data) {
-  if (typeof Buffer === &#x27;function&#x27; &#x26;&#x26;
-    typeof Buffer.isBuffer === &#x27;function&#x27; &#x26;&#x26;
+  if (typeof Buffer === 'function' &amp;&amp;
+    typeof Buffer.isBuffer === 'function' &amp;&amp;
     Buffer.isBuffer(data)) {
     if (!this._decoder) {
-      var SD = require(&#x27;string_decoder&#x27;).StringDecoder
-      this._decoder = new SD(&#x27;utf8&#x27;)
+      var SD = require('string_decoder').StringDecoder
+      this._decoder = new SD('utf8')
     }
     data = this._decoder.write(data)
   }
 
   this._parser.write(data.toString())
-  this.emit(&#x27;data&#x27;, data)
+  this.emit('data', data)
   return true
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 parser.onattribute = function (attr) {
-// an attribute.  attr has &#x22;name&#x22; and &#x22;value&#x22;
+// an attribute.  attr has "name" and "value"
 };
 parser.onend = function () {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.<span class="apidocCodeKeywordSpan">write</span>(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#
-x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close();
+parser.<span class="apidocCodeKeywordSpan">write</span>('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&amp;#
+x3c;/who&gt;!&lt;/xml&gt;').close();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
 ...</pre></li>
@@ -1702,7 +1693,7 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">end = function (chunk) {
-  if (chunk &#x26;&#x26; chunk.length) {
+  if (chunk &amp;&amp; chunk.length) {
     this.write(chunk)
   }
   this._parser.end()
@@ -1727,8 +1718,8 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">on = function (ev, handler) {
   var me = this
-  if (!me._parser[&#x27;on&#x27; + ev] &#x26;&#x26; streamWraps.indexOf(ev) !== -1) {
-    me._parser[&#x27;on&#x27; + ev] = function () {
+  if (!me._parser['on' + ev] &amp;&amp; streamWraps.indexOf(ev) !== -1) {
+    me._parser['on' + ev] = function () {
       var args = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments)
       args.splice(0, 0, ev)
       me.emit.apply(me, args)
@@ -1740,16 +1731,16 @@ saxStream.on(&#x22;error&#x22;, function (e) {
     <li>example usage<pre class="apidocCodePre">...
 };
 
-parser.write(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close
+parser.write('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;').close
 ();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.<span class="apidocCodeKeywordSpan">on</span>(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.<span class="apidocCodeKeywordSpan">on</span>("error", function (e) {
   // unhandled errors will throw, since this is a proper node
   // event emitter.
-  console.error(&#x22;error!&#x22;, e)
+  console.error("error!", e)
   // clear the error
   this._parser.error = null
   this._parser.resume()
@@ -1772,35 +1763,35 @@ saxStream.<span class="apidocCodeKeywordSpan">on</span>(&#x22;error&#x22;, funct
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">write = function (data) {
-  if (typeof Buffer === &#x27;function&#x27; &#x26;&#x26;
-    typeof Buffer.isBuffer === &#x27;function&#x27; &#x26;&#x26;
+  if (typeof Buffer === 'function' &amp;&amp;
+    typeof Buffer.isBuffer === 'function' &amp;&amp;
     Buffer.isBuffer(data)) {
     if (!this._decoder) {
-      var SD = require(&#x27;string_decoder&#x27;).StringDecoder
-      this._decoder = new SD(&#x27;utf8&#x27;)
+      var SD = require('string_decoder').StringDecoder
+      this._decoder = new SD('utf8')
     }
     data = this._decoder.write(data)
   }
 
   this._parser.write(data.toString())
-  this.emit(&#x27;data&#x27;, data)
+  this.emit('data', data)
   return true
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 parser.onattribute = function (attr) {
-// an attribute.  attr has &#x22;name&#x22; and &#x22;value&#x22;
+// an attribute.  attr has "name" and "value"
 };
 parser.onend = function () {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.<span class="apidocCodeKeywordSpan">write</span>(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#
-x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close();
+parser.<span class="apidocCodeKeywordSpan">write</span>('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&amp;#
+x3c;/who&gt;!&lt;/xml&gt;').close();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).createStream(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").createStream(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
 ...</pre></li>
@@ -1827,16 +1818,16 @@ saxStream.on(&#x22;error&#x22;, function (e) {
 // parser stream is done, and ready to have more stuff written to it.
 };
 
-parser.write(&#x27;&#x3c;xml&#x3e;Hello, &#x3c;who name=&#x22;world&#x22;&#x3e;world&#x3c;/who&#x3e;!&#x3c;/xml&#x3e;&#x27;).close
+parser.write('&lt;xml&gt;Hello, &lt;who name="world"&gt;world&lt;/who&gt;!&lt;/xml&gt;').close
 ();
 
 // stream usage
 // takes the same options as the parser
-var saxStream = require(&#x22;sax&#x22;).<span class="apidocCodeKeywordSpan">createStream</span>(strict, options)
-saxStream.on(&#x22;error&#x22;, function (e) {
+var saxStream = require("sax").<span class="apidocCodeKeywordSpan">createStream</span>(strict, options)
+saxStream.on("error", function (e) {
 // unhandled errors will throw, since this is a proper node
 // event emitter.
-console.error(&#x22;error!&#x22;, e)
+console.error("error!", e)
 // clear the error
 this._parser.error = null
 this._parser.resume()
@@ -1864,7 +1855,7 @@ through unmolested.
 ## Usage
 
 ```javascript
-var sax = require(&#x22;./lib/sax&#x22;),
+var sax = require("./lib/sax"),
   strict = true, // set to false for html-mode
   parser = sax.<span class="apidocCodeKeywordSpan">parser</span>(strict);
 
@@ -1886,3 +1877,4 @@ parser.ontext = function (t) {
     ]
 </div>
 </div>
+</body></html>
