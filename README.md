@@ -1,4 +1,7 @@
-# api documentation for  [sax (v1.2.2)](https://github.com/isaacs/sax-js#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-sax.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-sax) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-sax.svg)](https://travis-ci.org/npmdoc/node-npmdoc-sax)
+# npmdoc-sax
+
+#### basic api documentation for  [sax (v1.2.2)](https://github.com/isaacs/sax-js#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-sax.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-sax) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-sax.svg)](https://travis-ci.org/npmdoc/node-npmdoc-sax)
+
 #### An evented streaming XML parser in JavaScript
 
 [![NPM](https://nodei.co/npm/sax.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/sax)
@@ -89,7 +92,8 @@
         "posttest": "standard -F test/*.js lib/*.js",
         "test": "tap test/*.js --cov -j4"
     },
-    "version": "1.2.2"
+    "version": "1.2.2",
+    "bin": {}
 }
 ```
 
